@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测测你的灵魂对应哪位中国历史人物</title>
+<style>
+:root{--ink:#2d2925;--muted:#756c61;--paper:#f6f0e6;--card:#fffaf2;--red:#a43c32;--gold:#b28b51;--line:#e4d8c7;--green:#536b5c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 10%,#e9dfd0,transparent 30%),var(--paper);color:var(--ink);font-family:"Noto Serif SC","Songti SC",serif}
+main{max-width:800px;margin:0 auto;padding:24px 18px 60px}.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,5vw,42px);box-shadow:0 14px 40px #5b463014}
+.kicker{letter-spacing:.22em;color:var(--red);font-size:12px}.title{font-size:clamp(28px,5vw,44px);line-height:1.35;margin:16px 0}.subtitle{color:var(--muted);line-height:1.8}
+.ornament{text-align:center;color:var(--gold);margin:20px 0}.btn{background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 28px;font:inherit;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.secondary{background:transparent;color:var(--red);border:1px solid var(--red)}
+.hidden{display:none!important}.progressrow{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:10px}.progress{height:7px;background:#e9dfd0;border-radius:10px;overflow:hidden;margin-bottom:26px}.bar{height:100%;width:0;background:var(--red);transition:width .3s}
+.qtitle{font-size:23px;line-height:1.6;margin:12px 0 22px}.choices{display:grid;gap:12px}.choice{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fffdf8;cursor:pointer;line-height:1.7;transition:.2s}.choice:hover{border-color:var(--gold);transform:translateY(-1px)}.choice.selected{border-color:var(--red);background:#f9eee7;box-shadow:0 0 0 2px #a43c3210}.nav{display:flex;justify-content:space-between;gap:10px;margin-top:25px}.nav button:disabled{opacity:.4;cursor:not-allowed}
+.resulttop{text-align:center}.seal{width:72px;height:72px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--red);font-size:24px;margin:0 auto 18px}.resultname{font-size:clamp(28px,6vw,42px);margin:10px 0}.resultquote{color:var(--red);font-size:18px;line-height:1.8}.section{border-top:1px solid var(--line);padding-top:20px;margin-top:22px}.section h3{font-size:18px;color:var(--red)}.section p{line-height:1.9;color:#49423b}.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:18px 0}.tag{border:1px solid var(--line);padding:6px 12px;border-radius:999px;color:var(--green);font-size:13px}.sharebox{background:#f2e9dc;border-radius:14px;padding:16px;margin-top:22px;text-align:center;line-height:1.7}.fade{animation:fade .35s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;line-height:1.7}
+@media(max-width:480px){main{padding:14px 12px 36px}.panel{border-radius:16px}.nav button{padding:12px 18px}}
+</style></head>
+<body><main>
+<section id="home" class="panel fade">
+<div class="kicker">ANCIENT SOUL · 趣味人格测试</div><div class="ornament">✦　卷轴启封　✦</div>
+<h1 class="title">测测你的灵魂<br>对应哪位中国历史人物</h1>
+<p class="subtitle">40道生活选择题，不考史书、不问标准答案。你的习惯、直觉与待人方式，将拼出一幅古风人格画像。</p>
+<div class="tags"><span class="tag">谋士</span><span class="tag">帝王</span><span class="tag">文人</span><span class="tag">侠客</span><span class="tag">诗人</span><span class="tag">将领</span><span class="tag">隐士</span></div>
+<div class="ornament">— ◇ —</div><button class="btn" onclick="start()">开始测试</button>
+<footer>纯娱乐性质的人格映射，不是心理诊断，也不是历史评价。</footer>
+</section>
+<section id="quiz" class="panel hidden fade">
+<div class="progressrow"><span id="count">第 1 / 40 题</span><span id="pct">2.5%</span></div><div class="progress"><div class="bar" id="bar"></div></div>
+<div id="question"></div><div class="nav"><button class="btn secondary" id="prev" onclick="prev()">上一题</button><button class="btn" id="next" onclick="next()">下一题</button></div>
+</section>
+<section id="result" class="panel hidden fade"></section>
+</main>
+<script>
+const questions=[
+["面对突然变动的计划，你通常？",["先快速重新安排，保证事情推进","看看变动带来什么新机会","有点烦，但会按现实情况调整","先观察一会儿，确认是否真需要行动"]],
+["朋友向你倾诉烦恼，你更常？",["帮他拆解问题，给出办法","认真听，让他知道有人理解","用轻松方式缓和情绪","直接陪他去做点能改变现状的事"]],
+["团队任务没人统筹时，你会？",["主动整理任务和时间表","先确认大家意见再协调","默默做好自己擅长的部分","提出一个大胆方向让团队尝试"]],
+["你最看重做事的？",["效率与结果","意义与原则","过程与体验","稳定与可持续"]],
+["在人多的场合，你通常？",["自然接过组织角色","跟熟悉的人聊得深入","观察氛围，偶尔发言","喜欢有明确任务，不爱闲聊"]],
+["遇到不公平，你更倾向？",["据理力争，推动改变","先弄清来龙去脉","私下帮助受影响的人","保留证据，选择有效时机"]],
+["计划旅行，你最享受？",["把路线和关键安排规划好","随心探索未知街巷","研究当地文化与故事","和伙伴一起完成有趣挑战"]],
+["你做决定时更依赖？",["逻辑和可行性","直觉与价值观","经验和细节","多方意见与权衡"]],
+["被误解时，你通常？",["解释清楚，避免影响事情","希望对方理解我的真实想法","不急着解释，时间会说明","判断是否值得解释"]],
+["你喜欢哪种工作环境？",["目标明确、执行力强","自由、有创意空间","合作友善、节奏适中","自主、安静、专注"]],
+["一个项目出现风险，你会？",["制定备选方案","重新评估目标是否值得","提醒团队并做好准备","抓住核心风险，优先解决"]],
+["你的周末更像？",["处理积累的事项，获得清爽感","见朋友或参加活动","阅读、创作、逛展","户外活动或挑战新技能"]],
+["别人夸你时，你更希望是？",["能力可靠","有独特想法","温柔而有洞察力","勇敢且有行动力"]],
+["面对竞争，你？",["研究规则，提升胜算","不愿牺牲原则","把竞争当作自我突破","更在乎合作共赢"]],
+["你最难忍受？",["低效和反复拖延","言行不一","缺少空间和自由","逃避责任"]],
+["遇到陌生任务，你？",["先拆解步骤","先找灵感和案例","请教有经验的人","直接尝试，再从反馈调整"]],
+["你的表达风格？",["简洁直接","有故事和比喻","温和、考虑感受","幽默或有点锋芒"]],
+["重要事情临近，你会？",["提前准备，留出缓冲","边做边调整","集中精力冲刺","先确保关键资源和支持"]],
+["在朋友群里，你常是？",["安排活动的人","情绪支持者","点子提供者","不常出现但关键时刻在"]],
+["你更喜欢哪种成就感？",["把复杂事情掌控好","创造出独特作品","帮助别人走出困境","突破自己的极限"]],
+["如果有一天完全空闲，你会？",["整理生活和未来计划","去一个没去过的地方","沉浸在喜欢的艺术或书里","运动、手作或实践兴趣"]],
+["收到模糊指令，你会？",["主动问清目标与标准","按自己的理解先做原型","找参考，避免误差","确认边界后独立推进"]],
+["有人提出与你相反的观点，你？",["讨论证据和逻辑","想知道他为何这样想","尊重差异，未必争论","指出核心分歧，提出替代方案"]],
+["你通常如何保持动力？",["目标和进度可视化","兴趣和灵感","责任感和人际支持","挑战与竞争"]],
+["看到一个机会但风险不小，你？",["评估风险，设计退路","听听内心是否值得","等待更多信息","如果值得就小步试探"]],
+["你在学习新东西时？",["建立体系和笔记","从实际案例入手","与人讨论理解","反复练习直到熟练"]],
+["你希望留下怎样的印象？",["值得信赖、能办事","有思想、有趣","真诚、懂得体谅","有胆识、敢于尝试"]],
+["小组里有人掉队，你？",["重新分配工作，确保完成","鼓励他并了解困难","自己补位，避免冲突","明确沟通责任与期限"]],
+["面对规则，你认为？",["规则让协作更高效","规则也应该被审视","遵守底线，保留灵活性","必要时提出合理改进"]],
+["你会收藏什么？",["工具、教程、实用资料","书、艺术品、灵感碎片","旅行纪念和故事","运动装备或挑战记录"]],
+["一个长期目标，你更愿？",["分阶段持续推进","跟随变化调整愿景","保持低调，慢慢积累","设定里程碑，主动争取"]],
+["你更容易被什么打动？",["专业能力和智慧","真诚的表达","细微的善意","勇敢的行动"]],
+["当你疲惫时，恢复方式？",["整理思绪，重新规划","听音乐、看书或创作","与信任的人相处","运动或去户外走走"]],
+["遇到难题卡住，你？",["换角度分析，找突破口","暂时放下，等待灵感","寻求交流与反馈","先做最小可行尝试"]],
+["你如何看待名声？",["是影响力和责任的一部分","不如做真正有意义的事","作品或行动自然会留下痕迹","名声不是目标，能力才是"]],
+["你擅长？",["判断局势和安排资源","表达感受与观察","建立信任和支持","执行、坚持和应变"]],
+["你更愿意负责？",["战略与决策","内容与创意","团队关系与支持","现场执行与行动"]],
+["遇到冲突，你会？",["找出利益与事实交集","尝试理解情绪和诉求","降低对抗，寻找折中","明确边界，直接解决"]],
+["你对未来的态度？",["制定计划并逐步实现","保持开放，欢迎变化","希望有独立空间和节奏","勇于探索，边走边看"]],
+["如果给自己一句提醒，你会选？",["谋定而后动","心有所感，笔有所寄","知止而后安","行胜于言"]]
+];
+const archetypes=[
+{name:"诸葛亮",type:"谋士",quote:"把混乱理出秩序，是一种安静的锋芒。",traits:["系统思维","预判","耐心"],desc:"你倾向于先看全局，再寻找最有效的路径。你未必最先表达，却常能把复杂问题拆成可执行的步骤。你珍惜可靠，也习惯为未知留出余地。",reason:"你的选择呈现出规划、分析、协同和风险意识的组合。你重视的不只是眼前结果，也包括如何让结果稳稳落地。",adv:"隐藏优势是把不同人的能力与信息整合起来，在关键节点提供清晰方向。",easter:"彩蛋：你的脑内可能常驻一个“备用方案生成器”，连休息都想顺手优化流程。"},
+{name:"李世民",type:"帝王",quote:"真正的掌控，不是事事亲为，而是知人善用。",traits:["决断","统筹","适应"],desc:"你有较强的整体意识，愿意承担决策责任，也能在局势变化时重新调整。你看重效率，但并不意味着忽略人。",reason:"你在选择中表现出领导意愿、资源协调和灵活判断。面对复杂局面，你更倾向于推动事情向前。",adv:"隐藏优势是识别关键问题、调动团队，并在不确定中建立行动框架。",easter:"彩蛋：如果生活是一款策略游戏，你可能不只想通关，还会研究队伍配置。"},
+{name:"王阳明",type:"文人",quote:"答案不只在远处，也在你愿意践行的那一步。",traits:["自省","原则","实践"],desc:"你喜欢让想法与行动一致。遇到问题，你会思考背后的意义，也在意自己是否真正做到相信的事情。",reason:"你的选择显示出价值判断、独立思考与实践倾向。你并不满足于只谈道理，愿意把理念放进生活。",adv:"隐藏优势是自我校准：在变化中仍能找到内在标准，避免被外界节奏完全牵引。",easter:"彩蛋：你可能是那种写下感悟之后，真的会试着改掉一个小习惯的人。"},
+{name:"李白",type:"诗人",quote:"不把世界走窄，灵感便有地方落脚。",traits:["想象力","好奇","自由"],desc:"你容易被新鲜事物吸引，喜欢保留探索的空间。对你而言，生活不只是任务列表，也是一连串值得体验的故事。",reason:"你的选择偏向兴趣驱动、开放体验和表达。你愿意在熟悉的轨道之外寻找新的可能。",adv:"隐藏优势是连接看似无关的事物，产生新点子，并用独特视角看待日常。",easter:"彩蛋：你的待办清单里可能混着“必须完成”和“突然想去看看海”。"},
+{name:"花木兰",type:"侠客",quote:"勇气不是没有犹豫，而是仍然选择向前。",traits:["勇敢","行动","担当"],desc:"你在关键时刻往往愿意行动，不喜欢只停留在讨论。你看重公平、责任和实际改变，也能在压力中寻找办法。",reason:"你的回答体现了行动导向、边界意识和承担精神。遇到阻碍，你更愿意先迈出能改变局面的那一步。",adv:"隐藏优势是快速进入实践状态，给停滞的事情带来动能。",easter:"彩蛋：你可能不爱喊口号，但一旦决定开始，行动速度会让旁人意外。"},
+{name:"苏轼",type:"文人",quote:"日子有千般滋味，仍可以活得有趣。",traits:["韧性","幽默","洞察"],desc:"你能从生活的细节里找到意义，面对变化时也尝试给自己留一份弹性。你有表达欲，也懂得不必让每件事都变成严肃的考验。",reason:"你的选择呈现出情绪调节、创造表达和适应力。你重视体验，并能从挫折中寻找新的理解。",adv:"隐藏优势是转换视角：在不完美的现实里重新发现可珍惜的部分。",easter:"彩蛋：你的精神工具箱可能有一个万能格子，标签写着“先吃点好吃的再想”。"},
+{name:"岳飞",type:"将领",quote:"把承诺化为行动，才是坚定的形状。",traits:["纪律","坚持","责任"],desc:"你重视目标和承诺，面对任务更愿意踏实推进。你并不一定喜欢强势表现，但在需要坚持的时候，往往能守住自己的节奏。",reason:"你的选择偏向责任感、执行和持续努力。你倾向于把事情做到有交代，而不是只留下漂亮的想法。",adv:"隐藏优势是长期稳定的投入，在短期热度过去之后仍能继续。",easter:"彩蛋：你可能会默默把“说到做到”当作自己的小型人生合同。"},
+{name:"陶渊明",type:"隐士",quote:"不随喧嚣改变方向，也是一种自由。",traits:["独立","沉静","自洽"],desc:"你珍惜内心空间，不一定需要时时参与热闹。你更愿意按照自己的价值与节奏生活，选择真正重要的事情。",reason:"你的选择表现出自主性、反思和对生活节奏的重视。你并非拒绝世界，而是倾向于挑选值得投入的连接。",adv:"隐藏优势是专注与自我恢复，能在安静中积累观察、知识和创造力。",easter:"彩蛋：你可能会把独处安排得很认真，像给自己预约了一场不被打扰的会面。"}
+];
+const dims=["谋士","帝王","文人","侠客","诗人","将领","隐士"];
+// Each choice contributes two dimension weights. Rotating patterns keep answer scores balanced but meaningfully different.
+const weights=[[3,0,0,0,0,0,1],[0,1,1,0,2,0,0],[1,2,0,1,0,2,0],[1,0,2,0,1,0,2]];
+let idx=0,answers=Array(40).fill(null),scores=Array(7).fill(0);
+function start(){document.getElementById('home').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');render()}
+function render(){let q=questions[idx];document.getElementById('count').textContent=`第 ${idx+1} / 40 题`;document.getElementById('pct').textContent=Math.round((idx+1)/40*100)+'%';document.getElementById('bar').style.width=(idx+1)/40*100+'%';document.getElementById('question').innerHTML=`<div class="fade"><div class="kicker">QUESTION ${String(idx+1).padStart(2,'0')}</div><div class="qtitle">${q[0]}</div><div class="choices">${q[1].map((v,i)=>`<div class="choice ${answers[idx]===i?'selected':''}" onclick="choose(${i})">${['A','B','C','D'][i]}　${v}</div>`).join('')}</div></div>`;document.getElementById('prev').disabled=idx===0;document.getElementById('next').textContent=idx===39?'查看结果':'下一题';}
+function choose(i){answers[idx]=i;render();document.getElementById('next').disabled=false}
+function prev(){if(idx>0){idx--;render()}}
+function next(){if(answers[idx]===null){alert('请先选择一个答案哦。');return}if(idx<39){idx++;render()}else showResult()}
+function showResult(){scores=Array(7).fill(0);answers.forEach((a,i)=>{let w=weights[(a+i)%4];w.forEach((v,j)=>scores[j]+=v);scores[(i+a)%7]+=1});let max=Math.max(...scores),winner=scores.indexOf(max); // deterministic tie handling
+let r=archetypes[winner];document.getElementById('quiz').classList.add('hidden');let box=document.getElementById('result');box.classList.remove('hidden');box.innerHTML=`<div class="resulttop fade"><div class="kicker">YOUR HISTORICAL SOUL</div><div class="seal">卷</div><div class="kicker">你最接近的历史人格是</div><h2 class="resultname">${r.name}</h2><div class="tags"><span class="tag">${r.type}</span>${r.traits.map(t=>`<span class="tag">${t}</span>`).join('')}</div><p class="resultquote">“${r.quote}”</p></div><div class="section"><h3>性格画像</h3><p>${r.desc}</p></div><div class="section"><h3>为什么匹配到你</h3><p>${r.reason}</p></div><div class="section"><h3>你的隐藏优势</h3><p>${r.adv}</p></div><div class="section"><h3>趣味彩蛋</h3><p>${r.easter}</p></div><div class="sharebox"><strong>测测你的灵魂对应哪位中国历史人物</strong><br>我的结果是：${r.name} · ${r.type}<br><small>仅供娱乐，别把人生交给一份测试结果。</small></div><div style="text-align:center;margin-top:26px"><button class="btn" onclick="restart()">重新测试</button> <button class="btn secondary" onclick="window.print()">保存 / 打印结果</button></div>`}
+function restart(){idx=0;answers=Array(40).fill(null);scores=Array(7).fill(0);document.getElementById('result').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');render()}
+</script></body></html>
